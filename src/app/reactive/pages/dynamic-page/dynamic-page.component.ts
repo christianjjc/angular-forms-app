@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ValidatorsService } from '../../../shared/service/validators.service';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -20,16 +21,20 @@ export class DynamicPageComponent {
   });
   public newFavorite: FormControl = new FormControl('', Validators.required);
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private validatorService: ValidatorsService
+  ) {}
 
   get favoriteGames() {
     return this.myForm.get('favoriteGames') as FormArray;
   }
 
   isValidField(field: string): boolean | null {
-    return (
-      this.myForm.controls[field].errors && this.myForm.controls[field].touched
-    );
+    return this.validatorService.isValidField(this.myForm, field);
+    // return (
+    //   this.myForm.controls[field].errors && this.myForm.controls[field].touched
+    // );
   }
 
   isValidFieldInArray(formArray: FormArray, index: number) {
